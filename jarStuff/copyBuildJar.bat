@@ -6,4 +6,7 @@ copy ..\*.java .\
 copy .\config\*.* .\
 javac *.java
 jar cvfm MovieList.jar manifest.mf *.class
+del .\*.java
+del .\*.class
+del .\*.mf
 pause
