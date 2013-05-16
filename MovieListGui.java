@@ -94,20 +94,11 @@ public class MovieListGui extends JFrame implements Observer, ActionListener {
    */
   public MovieListGui() {
     // Build the GUI
-    setTitle("MovieList -- Corban Mailloux");
+    setTitle("MovieList");
     setLayout(new BorderLayout());
 
     // Top search box
     searchBox = new JTextField("Enter search term...");
-    /*
-     * searchBox.addMouseListener(new MouseAdapter() { // Allows the first text
-     * to disappear when clicked
-     * 
-     * @Override public void mouseClicked(MouseEvent e) { if
-     * (searchBox.getText().equals("Enter search term...")) {
-     * searchBox.setText(""); } } });
-     */
-
     searchBox.addFocusListener(new FocusListener() {
 
       @Override
