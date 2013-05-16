@@ -1,5 +1,4 @@
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -26,8 +25,6 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 /**
  * MovieListGui.java
@@ -41,11 +38,11 @@ import javax.swing.event.ListSelectionListener;
  */
 
 /**
- * @author corb
+ * A GUI for the MovieList
  * 
+ * @author Corban Mailloux <corb@corb.co>
  */
-public class MovieListGui extends JFrame implements Observer, ActionListener,
-    ListSelectionListener {
+public class MovieListGui extends JFrame implements Observer, ActionListener {
 
   /**
    * The "Please wait" window
@@ -162,7 +159,6 @@ public class MovieListGui extends JFrame implements Observer, ActionListener,
     list = new JList<String>(listModel);
     list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     list.setSelectedIndex(0);
-    list.addListSelectionListener(this);
     list.setVisibleRowCount(20);
     list.addKeyListener(new KeyAdapter() {
       // Allows the user to press ENTER to open a movie in Explorer
@@ -191,8 +187,8 @@ public class MovieListGui extends JFrame implements Observer, ActionListener,
     });
 
     // Jason's color choices
-    list.setBackground(Color.BLACK);
-    list.setForeground(Color.GREEN);
+    // list.setBackground(Color.BLACK);
+    // list.setForeground(Color.GREEN);
 
     // Bottom buttons
     JPanel bottomPanel = new JPanel(new GridLayout(1, 2, 10, 10));
@@ -271,10 +267,4 @@ public class MovieListGui extends JFrame implements Observer, ActionListener,
     }
 
   }
-
-  @Override
-  public void valueChanged(ListSelectionEvent e) {
-    // e.getFirstIndex()
-  }
-
 }

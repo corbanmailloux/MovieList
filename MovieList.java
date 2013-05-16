@@ -19,8 +19,7 @@ import java.util.Observable;
 /**
  * A new version of MovieList, using Java 1.7.
  * 
- * @author Corban Mailloux <cdm3806@rit.edu>
- * 
+ * @author Corban Mailloux <corb@corb.co>
  */
 public class MovieList extends Observable {
 
@@ -40,6 +39,8 @@ public class MovieList extends Observable {
   private static List<Movie> currMovieList = new ArrayList<Movie>();
 
   public MovieList() {
+
+    // For the moment, the folders are hard-coded
     folderList.add(new File("J:\\Media\\Movies"));
     folderList.add(new File("P:\\Media\\Movies"));
     folderList.add(new File("Q:\\Media\\Movies"));
@@ -66,12 +67,6 @@ public class MovieList extends Observable {
 
     // Sort the movie list
     Collections.sort(HdMovieList);
-    // System.out.println(HdMovieList);
-
-    // for (Movie m1 : HdMovieList) {
-    // System.out.println(m1.getName());
-    // }
-    System.out.println("Total Movies: " + HdMovieList.size());
 
     // Set up the current MovieList
     currMovieList.addAll(HdMovieList);
@@ -112,7 +107,7 @@ public class MovieList extends Observable {
    * Non-case-sensitive search of the current movie list for a string
    * 
    * @param searchStr
-   *          - the string to search for
+   *          - the string to search for in movie titles
    */
   public void search(String searchStr) {
     currMovieList.clear();
@@ -123,8 +118,5 @@ public class MovieList extends Observable {
     }
     setChanged();
     notifyObservers();
-    // return (currMovieList.size() > 0);
-
   }
-
 }

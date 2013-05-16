@@ -110,5 +110,4 @@ public class Movie implements Comparable<Movie> {
   public int hashCode() {
     return fileObject.hashCode();
   }
-
 }
