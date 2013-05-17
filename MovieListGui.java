@@ -21,10 +21,13 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 /**
  * MovieListGui.java
@@ -42,7 +45,8 @@ import javax.swing.event.DocumentListener;
  * 
  * @author Corban Mailloux <corb@corb.co>
  */
-public class MovieListGui extends JFrame implements Observer, ActionListener {
+public class MovieListGui extends JFrame implements Observer, ActionListener,
+    ListSelectionListener {
 
   /**
    * The "Please wait" window
@@ -88,6 +92,11 @@ public class MovieListGui extends JFrame implements Observer, ActionListener {
    * The label that says the number of movies
    */
   private JLabel statusLabel;
+
+  /**
+   * The Movie Details box
+   */
+  private JTextArea detailsBox;
 
   /**
    * The constructor for a GUI
@@ -151,6 +160,7 @@ public class MovieListGui extends JFrame implements Observer, ActionListener {
     list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     list.setSelectedIndex(0);
     list.setVisibleRowCount(20);
+    list.addListSelectionListener(this);
     list.addKeyListener(new KeyAdapter() {
       // Allows the user to press ENTER to open a movie in Explorer
       @Override
@@ -181,13 +191,22 @@ public class MovieListGui extends JFrame implements Observer, ActionListener {
     // list.setBackground(Color.BLACK);
     // list.setForeground(Color.GREEN);
 
-    // Bottom buttons
-    JPanel bottomPanel = new JPanel(new GridLayout(1, 2, 10, 10));
+    // Bottom section (Details and buttons)
+    JPanel bottomPanel = new JPanel(new BorderLayout());
+
+    detailsBox = new JTextArea("Select a movie.", 3, 0);
+    detailsBox.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 15));
+
+    JPanel bottomButtonPanel = new JPanel(new GridLayout(1, 2, 10, 10));
     openExplorer = new JButton("Open in Explorer");
     openExplorer.addActionListener(this);
     statusLabel = new JLabel();
-    bottomPanel.add(openExplorer);
-    bottomPanel.add(statusLabel);
+    bottomButtonPanel.add(openExplorer);
+    bottomButtonPanel.add(statusLabel);
+
+    // Add to the bottomPanel
+    bottomPanel.add(detailsBox, BorderLayout.CENTER);
+    bottomPanel.add(bottomButtonPanel, BorderLayout.SOUTH);
 
     // Add everything the the main frame
     add(searchBox, BorderLayout.NORTH);
@@ -200,7 +219,7 @@ public class MovieListGui extends JFrame implements Observer, ActionListener {
     // Build the "Please wait" dialog
     waitDialog = new JDialog();
     JLabel label = new JLabel("Please wait while the files are indexed.");
-    label.setFont(new Font("Serif", Font.PLAIN, 25));
+    label.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 25));
     waitDialog.setTitle("Please Wait...");
     waitDialog.add(label);
     waitDialog.pack();
@@ -257,5 +276,16 @@ public class MovieListGui extends JFrame implements Observer, ActionListener {
       }
     }
 
+  }
+
+  /**
+   * Updates the details box when a movie is selected.
+   */
+  @Override
+  public void valueChanged(ListSelectionEvent e) {
+    int tempSelectionIndex = list.getSelectedIndex();
+    if (tempSelectionIndex >= 0) {
+      detailsBox.setText(movieList.get(tempSelectionIndex).toString());
+    }
   }
 }

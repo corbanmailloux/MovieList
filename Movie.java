@@ -53,10 +53,10 @@ public class Movie implements Comparable<Movie> {
    */
   @Override
   public String toString() {
-    String returnStr = "---------- Details: ----------\n";
+    String returnStr = "";
     returnStr += "Name: " + fileName + "\n";
-    returnStr += "  Path: " + fileObject.getAbsolutePath() + "\n";
-    returnStr += "  Size: " + fileSize + " GB";
+    returnStr += "Path: " + fileObject.getAbsolutePath() + "\n";
+    returnStr += "Size: " + fileSize + " GB";
     return returnStr;
   }
 
