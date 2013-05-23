@@ -131,18 +131,21 @@ public class MovieListGui extends JFrame implements Observer, ActionListener,
 
     // Real-time searching
     searchBox.getDocument().addDocumentListener(new DocumentListener() {
+      @Override
       public void changedUpdate(DocumentEvent e) {
         if (!searchBox.getText().equals("Enter search term...")) {
           movieModel.search(searchBox.getText());
         }
       }
 
+      @Override
       public void removeUpdate(DocumentEvent e) {
         if (!searchBox.getText().equals("Enter search term...")) {
           movieModel.search(searchBox.getText());
         }
       }
 
+      @Override
       public void insertUpdate(DocumentEvent e) {
         if (!searchBox.getText().equals("Enter search term...")) {
           movieModel.search(searchBox.getText());
@@ -250,12 +253,15 @@ public class MovieListGui extends JFrame implements Observer, ActionListener,
   @Override
   public void update(Observable obs1, Object obj1) {
     movieList = movieModel.getMovieList();
-    statusLabel.setText("Number of Movies: " + movieList.size());
+    int numMovies = movieList.size();
+    statusLabel.setText("Number of Movies: " + numMovies);
 
     listModel.clear();
 
-    for (Movie m1 : movieList) {
-      listModel.addElement(m1.getName());
+    if (numMovies > 0) {
+      for (Movie m1 : movieList) {
+        listModel.addElement(m1.getName());
+      }
     }
     validate();
 

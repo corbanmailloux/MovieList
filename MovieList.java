@@ -45,6 +45,7 @@ public class MovieList extends Observable {
     folderList.add(new File("P:\\Media\\Movies"));
     folderList.add(new File("Q:\\Media\\Movies"));
     folderList.add(new File("S:\\Media\\Movies"));
+    //folderList.add(new File("C:\\temp"));
 
     // For each folder
     for (File folder : folderList) {
