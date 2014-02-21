@@ -5,4 +5,4 @@ MovieList is a simple Java 1.7 media manager for movie collections that span mul
 
 A runnable JAR file is located in the "jarStuff" directory.
 
-See http://corb.co/projects/MovieList/ for more details.
+See http://corb.co/projects/movielist/ for more details.
