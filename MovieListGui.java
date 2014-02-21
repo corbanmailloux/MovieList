@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -9,16 +10,24 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Properties;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -52,6 +61,26 @@ public class MovieListGui extends JFrame implements Observer, ActionListener,
    * The "Please wait" window
    */
   private JDialog waitDialog;
+
+  /**
+   * The "Add Folders" window
+   */
+  // private JFrame addFolder;
+
+  /**
+   * The folder selection window.
+   */
+  private JFileChooser folderSelect;
+
+  /**
+   * The add folder button.
+   */
+  private JButton browseForFolder;
+
+  /**
+   * The list of folder locations to search.
+   */
+  private List<File> folderList;
 
   /**
    * Default, to avoid a warning
@@ -89,9 +118,19 @@ public class MovieListGui extends JFrame implements Observer, ActionListener,
   private JButton openExplorer;
 
   /**
+   * The button that shows duplicates
+   */
+  private JButton showDupes;
+
+  /**
    * The label that says the number of movies
    */
   private JLabel statusLabel;
+
+  /**
+   * The button that resets the search
+   */
+  private JButton resetButton;
 
   /**
    * The Movie Details box
@@ -102,7 +141,54 @@ public class MovieListGui extends JFrame implements Observer, ActionListener,
    * The constructor for a GUI
    */
   public MovieListGui() {
-    // Build the GUI
+
+    // Set up the folderList and the properties file
+    folderList = new ArrayList<File>();
+    Properties prop = new Properties();
+    try {
+      prop.load(new FileInputStream("MovieList.properties"));
+    } catch (FileNotFoundException e1) {
+      try {
+        prop.load(new FileInputStream("src/MovieList.properties"));
+      } catch (FileNotFoundException e2) {
+        JOptionPane.showMessageDialog(this,
+            "\"MovieList.properties\" file not found.");
+        System.exit(1);
+      } catch (IOException e2) {
+        e2.printStackTrace();
+        System.exit(1);
+      }
+    } catch (IOException e1) {
+      e1.printStackTrace();
+      System.exit(1);
+    }
+
+    if (prop.containsKey("FOLDERS")) {
+      String folders = prop.getProperty("FOLDERS");
+      String[] folderArray = folders.split(";");
+      for (String folder : folderArray) {
+        folderList.add(new File(folder));
+      }
+    }
+    // System.out.println(folderList);
+
+    /*
+     * if (folderList.isEmpty()) { // Build the folder select dialog
+     * folderSelect = new JFileChooser();
+     * folderSelect.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+     * addFolder = new JFrame();
+     * addFolder.setTitle("Add new location(s) for movies.");
+     * addFolder.setSize(100, 500);
+     * addFolder.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+     * browseForFolder = new JButton("Add a folder");
+     * browseForFolder.addActionListener(this); addFolder.add(browseForFolder);
+     * addFolder.setVisible(true);
+     * 
+     * 
+     * //folderSelect.showOpenDialog(this); }
+     */
+
+    // Build the main GUI
     setTitle("MovieList");
     setLayout(new BorderLayout());
 
@@ -124,6 +210,16 @@ public class MovieListGui extends JFrame implements Observer, ActionListener,
         }
       }
 
+    });
+
+    searchBox.addKeyListener(new KeyAdapter() {
+      // Allows the user to press ENTER to open a movie in Explorer
+      @Override
+      public void keyTyped(KeyEvent e) {
+        if (e.getKeyChar() == KeyEvent.VK_ESCAPE) {
+          searchBox.setText("");
+        }
+      }
     });
 
     // Listen for ENTER
@@ -190,22 +286,52 @@ public class MovieListGui extends JFrame implements Observer, ActionListener,
       }
     });
 
-    // Jason's color choices
-    // list.setBackground(Color.BLACK);
-    // list.setForeground(Color.GREEN);
+    // Get the color preferences, and try to set them.
+    String backColor = prop.getProperty("Color.Background");
+    String foreColor = prop.getProperty("Color.Foreground");
+    try {
+      if (backColor != null && foreColor != null) {
+        list.setBackground((Color) (Class.forName("java.awt.Color")
+            .getField(backColor)).get(null));
+        list.setForeground((Color) (Class.forName("java.awt.Color")
+            .getField(foreColor)).get(null));
+      }
+    } catch (IllegalArgumentException e1) {
+      // TODO Auto-generated catch block
+      e1.printStackTrace();
+    } catch (IllegalAccessException e1) {
+      // TODO Auto-generated catch block
+      e1.printStackTrace();
+    } catch (NoSuchFieldException e1) {
+      // TODO Auto-generated catch block
+      e1.printStackTrace();
+    } catch (SecurityException e1) {
+      // TODO Auto-generated catch block
+      e1.printStackTrace();
+    } catch (ClassNotFoundException e1) {
+      // TODO Auto-generated catch block
+      e1.printStackTrace();
+    }
 
     // Bottom section (Details and buttons)
     JPanel bottomPanel = new JPanel(new BorderLayout());
 
     detailsBox = new JTextArea("Select a movie.", 3, 0);
     detailsBox.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 15));
+    detailsBox.setEditable(false);
 
     JPanel bottomButtonPanel = new JPanel(new GridLayout(1, 2, 10, 10));
     openExplorer = new JButton("Open in Explorer");
     openExplorer.addActionListener(this);
+    showDupes = new JButton("Show Duplicates");
+    showDupes.addActionListener(this);
     statusLabel = new JLabel();
+    resetButton = new JButton("Reset");
+    resetButton.addActionListener(this);
     bottomButtonPanel.add(openExplorer);
+    bottomButtonPanel.add(showDupes);
     bottomButtonPanel.add(statusLabel);
+    bottomButtonPanel.add(resetButton);
 
     // Add to the bottomPanel
     bottomPanel.add(detailsBox, BorderLayout.CENTER);
@@ -229,7 +355,8 @@ public class MovieListGui extends JFrame implements Observer, ActionListener,
 
     // Show the "Please wait" dialog
     waitDialog.setVisible(true);
-    movieModel = new MovieList();
+    // Actually create the MovieList and scan the folders.
+    movieModel = new MovieList(folderList);
     // Register the view with the model.
     movieModel.addObserver(this);
     // waitDialog.dispose();
@@ -279,6 +406,14 @@ public class MovieListGui extends JFrame implements Observer, ActionListener,
       int tempSelectionIndex = list.getSelectedIndex();
       if (tempSelectionIndex >= 0) {
         movieModel.openExplorer(movieList.get(tempSelectionIndex));
+      }
+    } else if (e.getSource() == showDupes) {
+      movieModel.dupes();
+    } else if (e.getSource() == resetButton) {
+      searchBox.setText("");
+    } else if (e.getSource() == browseForFolder) {
+      if (folderSelect.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+        folderList.add(folderSelect.getSelectedFile());
       }
     }
 

@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Observable;
 
+import javax.swing.JOptionPane;
+
 /**
  * MovieList.java
  *
@@ -38,14 +40,14 @@ public class MovieList extends Observable {
    */
   private static List<Movie> currMovieList = new ArrayList<Movie>();
 
-  public MovieList() {
+  /**
+   * The list of duplicates.
+   */
+  private static List<Movie> dupeList = new ArrayList<Movie>();
 
-    // For the moment, the folders are hard-coded
-    folderList.add(new File("J:\\Media\\Movies"));
-    folderList.add(new File("P:\\Media\\Movies"));
-    folderList.add(new File("Q:\\Media\\Movies"));
-    folderList.add(new File("S:\\Media\\Movies"));
-    //folderList.add(new File("C:\\temp"));
+  public MovieList(List<File> inFolderList) {
+
+    folderList = inFolderList;
 
     // For each folder
     for (File folder : folderList) {
@@ -66,8 +68,20 @@ public class MovieList extends Observable {
       }
     }
 
+    if (HdMovieList.isEmpty()) {
+      JOptionPane.showMessageDialog(null,
+          "No movies found. Please verify your \"MovieList.properties\" file.");
+    }
+
     // Sort the movie list
     Collections.sort(HdMovieList);
+
+    // Find duplicates
+    for (Movie m1 : HdMovieList) {
+      if (Collections.frequency(HdMovieList, m1) > 1) {
+        dupeList.add(m1);
+      }
+    }
 
     // Set up the current MovieList
     currMovieList.addAll(HdMovieList);
@@ -82,6 +96,16 @@ public class MovieList extends Observable {
   }
 
   /**
+   * Set the current list to the dupeList
+   */
+  public void dupes() {
+    currMovieList.clear();
+    currMovieList.addAll(dupeList);
+    setChanged();
+    notifyObservers();
+  }
+
+  /**
    * Open a given Movie in Windows Explorer.
    * 
    * @param m1
@@ -89,7 +113,7 @@ public class MovieList extends Observable {
    */
   public void openExplorer(Movie m1) {
     try {
-      Runtime.getRuntime().exec("explorer /select, " + m1.getPath());
+      Runtime.getRuntime().exec("explorer /select, \"" + m1.getPath() + "\"");
     } catch (IOException e) {
       e.printStackTrace();
     }
