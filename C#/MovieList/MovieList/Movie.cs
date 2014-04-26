@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MovieList
 {
-    class Movie
+    class Movie : IComparable
     {
         private FileInfo file;
 
@@ -46,6 +46,24 @@ namespace MovieList
             startInfo.Arguments = "/C explorer /select, \"" + file.FullName + "\"";
             process.StartInfo = startInfo;
             process.Start();
+        }
+
+        public Int32 CompareTo(Object obj)
+        {
+            if (obj == null)
+            {
+                return 1;
+            }
+
+            Movie inMovie = (Movie)obj;
+            if (inMovie != null)
+            {
+                return this.Name().CompareTo(inMovie.Name());
+            }
+            else
+            {
+                throw new ArgumentException("Object is not a Movie.");
+            }
         }
     }
 }

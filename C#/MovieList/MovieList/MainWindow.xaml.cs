@@ -62,6 +62,7 @@ namespace MovieList
                     }
                 }
             }
+            movieList.Sort();
             currMovieList.AddRange(movieList);
             UpdateList();
         }
