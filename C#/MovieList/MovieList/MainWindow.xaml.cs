@@ -121,8 +121,11 @@ namespace MovieList
          */
         private void OpenSelectionInExplorer()
         {
-            Movie selection = (Movie)MainListBox.SelectedItem;
-            selection.OpenInExplorer();
+            if (MainListBox.SelectedIndex != -1)
+            {
+                Movie selection = (Movie)MainListBox.SelectedItem;
+                selection.OpenInExplorer();
+            }
         }
 
         private void ExitMenuItem_Click(object sender, RoutedEventArgs e)
