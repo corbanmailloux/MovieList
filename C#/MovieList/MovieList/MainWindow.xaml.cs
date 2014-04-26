@@ -73,7 +73,7 @@ namespace MovieList
         public void UpdateList()
         {
             MainListBox.Items.Refresh();
-            NumMoviesLabel.Content = "Number of Movies: " + currMovieList.Count.ToString();
+            StatusBarText.Text = "Number of Movies: " + currMovieList.Count.ToString();
         }
 
 
