@@ -20,14 +20,14 @@
         </DockPanel>
 
 
-        <ListBox x:Name="MainListBox" MouseDoubleClick="MainListBox_MouseDoubleClick" KeyDown="MainListBox_KeyDown" Height="343" Margin="10,56,10,0" VerticalAlignment="Top" SelectionChanged="MainListBox_SelectionChanged" TabIndex="1"/>
+        <ListBox x:Name="MainListBox" MouseDoubleClick="MainListBox_MouseDoubleClick" KeyDown="MainListBox_KeyDown" Margin="10,56,10,142" SelectionChanged="MainListBox_SelectionChanged" TabIndex="1"/>
         <TextBox x:Name="SearchBox" TextChanged="SearchBox_TextChanged" Height="23" Margin="10,28,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Grid.ColumnSpan="2" TabIndex="0"/>
-        <Label x:Name="NameLabel" Content="Name:" HorizontalAlignment="Left" Margin="10,404,0,0" VerticalAlignment="Top" Width="55"/>
-        <Label x:Name="PathLabel" Content="Path:" HorizontalAlignment="Left" Margin="10,435,0,0" VerticalAlignment="Top" Width="55"/>
-        <Label x:Name="SizeLabel" Content="Size:" HorizontalAlignment="Left" Margin="10,466,0,0" VerticalAlignment="Top" Width="55"/>
-        <TextBox x:Name="NameBox" Height="23" Margin="65,407,10,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True"/>
-        <TextBox x:Name="PathBox" Height="23" Margin="65,438,10,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True"/>
-        <TextBox x:Name="SizeBox" Height="22" Margin="65,470,10,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True"/>
-        <Label x:Name="NumMoviesLabel" Content="" HorizontalAlignment="Right" Margin="0,508,10,0" VerticalAlignment="Top" Width="277"/>
+        <Label x:Name="NameLabel" Content="Name:" HorizontalAlignment="Left" Margin="10,0,0,114" VerticalAlignment="Bottom" Width="55"/>
+        <Label x:Name="PathLabel" Content="Path:" HorizontalAlignment="Left" Margin="10,0,0,83" VerticalAlignment="Bottom" Width="55"/>
+        <Label x:Name="SizeLabel" Content="Size:" HorizontalAlignment="Left" Margin="10,0,0,52" VerticalAlignment="Bottom" Width="55"/>
+        <TextBox x:Name="NameBox" Height="23" Margin="65,0,10,114" TextWrapping="Wrap" VerticalAlignment="Bottom" IsReadOnly="True"/>
+        <TextBox x:Name="PathBox" Height="23" Margin="65,0,10,83" TextWrapping="Wrap" VerticalAlignment="Bottom" IsReadOnly="True"/>
+        <TextBox x:Name="SizeBox" Height="22" Margin="65,0,10,52" TextWrapping="Wrap" VerticalAlignment="Bottom" IsReadOnly="True"/>
+        <Label x:Name="NumMoviesLabel" Content="" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="277"/>
     </Grid>
 </Window>
